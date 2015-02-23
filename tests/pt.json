@@ -1,8 +1,0 @@
-{"('TRUE', 'FALSE', 'TRUE')": 0.9, 
- "('TRUE', 'FALSE', 'FALSE')": 0.01, 
- "('TRUE', 'TRUE', 'TRUE')": 0.99, 
- "('TRUE', 'TRUE', 'FALSE')": 0.9, 
- "('FALSE', 'FALSE', 'FALSE')": 0.99, 
- "('FALSE', 'TRUE', 'TRUE')": 0.01, 
- "('FALSE', 'TRUE', 'FALSE')": 0.1, 
- "('FALSE', 'FALSE', 'TRUE')": 0.1}
