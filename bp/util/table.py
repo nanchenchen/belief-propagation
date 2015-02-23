@@ -28,10 +28,10 @@ class PotentialTable:
         _permutation(0)
         return states 
     
-    def init_table(self):
+    def init_table(self, value=0.0):
         states = self._get_state_list()
         for state in states:
-            self.table[state] = 0.0
+            self.table[state] = value
     
     def set_nodes(self, nodes):
         self.nodes = sorted(set(nodes), key=attrgetter('name'))
@@ -39,7 +39,7 @@ class PotentialTable:
     def set_table(self, table):
         self.table = table
 
-    def sum_out_var(self, var_idx):
+    def sum_out_var_by_idx(self, var_idx):
 
         def _pop_tuple_element(t, idx):
             l = list(t)
@@ -58,12 +58,28 @@ class PotentialTable:
 
         return new_table
 
+    def sum_out_var_by_var(self, var):
+        return self.sum_out_var_by_idx(self.nodes.index(var))
+
+
+    def set_row_value(self, row_setting, value):
+        """
+            row_setting = [(var, state), (var, state)...]
+        """
+        sorted_setting = sorted(row_setting, key=lambda tup: tup[0].name)
+        states = []
+        for var, state in sorted_setting:
+            if var in self.nodes:
+                states.append(state)
+        self.table[tuple(states)] = value
+
     def get_row_value(self, row_setting):
         """
             row_setting = [(var, state), (var, state)...]
         """
+        sorted_setting = sorted(row_setting, key=lambda tup: tup[0].name)
         states = []
-        for var, state in row_setting:
+        for var, state in sorted_setting:
             if var in self.nodes:
                 states.append(state)
         return self.table[tuple(states)]

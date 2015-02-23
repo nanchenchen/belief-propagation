@@ -64,7 +64,7 @@ class TestSequenceFunctions(unittest.TestCase):
                          "('FALSE', 'TRUE', 'FALSE')": 0.1,
                          "('FALSE', 'FALSE', 'TRUE')": 0.1}""";
         self.pt.set_table_from_json_str(json_str)
-        new_table = self.pt.sum_out_var(2)
+        new_table = self.pt.sum_out_var_by_idx(2)
         print new_table.get_json()
 
     def test_setting(self):
