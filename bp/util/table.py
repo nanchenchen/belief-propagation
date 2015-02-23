@@ -1,12 +1,13 @@
 import json
 from ast import literal_eval as make_tuple
+from operator import attrgetter
 
 class PotentialTable:
     def __init__(self, nodes=None, table=None):
         #from nose.tools import set_trace; set_trace()
         if nodes is None:
             nodes = []
-        self.nodes = nodes
+        self.nodes = sorted(set(nodes), key=attrgetter('name'))
 
         if table is None:
             table = {}
@@ -33,7 +34,7 @@ class PotentialTable:
             self.table[state] = 0.0
     
     def set_nodes(self, nodes):
-        self.nodes = nodes
+        self.nodes = sorted(set(nodes), key=attrgetter('name'))
     
     def set_table(self, table):
         self.table = table
@@ -50,17 +51,43 @@ class PotentialTable:
 
         new_table = PotentialTable(nodes=new_node_list)
         new_table.init_table()
-        from nose.tools import set_trace; set_trace()
+        #from nose.tools import set_trace; set_trace()
 
         for key in self.table:
             new_table.table[_pop_tuple_element(key, var_idx)] += self.table[key]
 
         return new_table
 
-        
+    def get_row_value(self, row_setting):
+        """
+            row_setting = [(var, state), (var, state)...]
+        """
+        states = []
+        for var, state in row_setting:
+            if var in self.nodes:
+                states.append(state)
+        return self.table[tuple(states)]
+
+    def get_row_setting(self, key):
+        setting = []
+        for i in range(len(self.nodes)):
+            setting.append((self.nodes[i], key[i]))
+        return setting
+
     def multiply(self, PT):
-        pass
-        
+        new_node_list = sorted(set(self.nodes).union(set(PT.nodes)), key=attrgetter('name'))
+        new_table = PotentialTable(nodes=new_node_list)
+        new_table.init_table()
+
+        for key in new_table.table:
+            setting = new_table.get_row_setting(key)
+            new_table.table[key] = self.get_row_value(setting) * PT.get_row_value(setting)
+        return new_table
+
+    def show_table(self):
+        for key in self.table:
+            print "%s  | %f" %( str(self.get_row_setting(key)), self.table[key])
+
     def get_json(self):
         return json.dumps(dict([(str(key), val) for key, val in self.table.iteritems()]))
         
