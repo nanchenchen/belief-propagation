@@ -15,3 +15,8 @@ Options:
    -o, --output          output file name, default to 'result.txt'
    -t, --threshold       threshold for convergence default to 1e-10
 ```
+
+Acknowledgment
+-------
+The BIF parser is provided by [Antoine Bosselut](antoine.bosselut@uw.edu).
+The codes in the project is for the assignment 3 in [CSE 515 - Statistical Methods in Computer Science](http://courses.cs.washington.edu/courses/cse515/15wi/), University of Washington.
