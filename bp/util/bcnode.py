@@ -64,10 +64,6 @@ class BCVarNode(BCNode):
         init_value = 1.0 / len(self.states)
         self.table.init_table(value=init_value)
 
-    """def add_connection(self, node):
-        super(BCVarNode, self).add_connection(node)
-        self.message_to_connections[node.name] = self.table"""
-
     def form_message_to_node(self, target_node):
         new_message = None
         for i in range(len(self.connected_nodes)):

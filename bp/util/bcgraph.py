@@ -86,3 +86,18 @@ class BCGraph(object):
         for var in self.var_nodes:
             print "Node %s" %var
             var.table.show_table()
+
+    def marginalized_results(self, BN):
+        result_str = ""
+        for node in BN:
+            var = self.nodes_dict[node.name]
+            result_str += var.name
+            for s in node.states:
+                setting = [(var, s)]
+                val = var.table.get_row_value(setting)
+                if val < 0.1:
+                    result_str += (" %.7f" %val).rstrip('0').rstrip('.')
+                else:
+                    result_str += (" %.6f" %val).rstrip('0').rstrip('.')
+            result_str += "\n"
+        return result_str.rstrip('\n')
