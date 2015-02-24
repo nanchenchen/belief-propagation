@@ -12,7 +12,7 @@ class TestNode:
         return self.name
 
 
-class TestSequenceFunctions(unittest.TestCase):
+class TestPotentialTable(unittest.TestCase):
 
     def setUp(self):
         self.pt = table.PotentialTable()

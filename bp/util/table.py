@@ -1,8 +1,10 @@
 import json
 from ast import literal_eval as make_tuple
 from operator import attrgetter
+import collections
 
-class PotentialTable:
+class PotentialTable(object):
+
     def __init__(self, nodes=None, table=None):
         #from nose.tools import set_trace; set_trace()
         if nodes is None:
@@ -12,7 +14,15 @@ class PotentialTable:
         if table is None:
             table = {}
         self.table = table
-    
+
+    def __str__(self):
+        return self.__repr__()
+    def __repr__(self):
+        output = str(tuple(self.nodes))
+        for key in self.table:
+            output += "%s  | %f" %( str(self.get_row_setting(key)), self.table[key]) + "\n"
+        return output
+
     def _get_state_list(self):
         states = []
         tmp_list = []
@@ -51,6 +61,7 @@ class PotentialTable:
 
         new_table = PotentialTable(nodes=new_node_list)
         new_table.init_table()
+
         #from nose.tools import set_trace; set_trace()
 
         for key in self.table:
@@ -98,9 +109,11 @@ class PotentialTable:
         for key in new_table.table:
             setting = new_table.get_row_setting(key)
             new_table.table[key] = self.get_row_value(setting) * PT.get_row_value(setting)
+
         return new_table
 
     def show_table(self):
+        print "Table %s" %(str(tuple(self.nodes)))
         for key in self.table:
             print "%s  | %f" %( str(self.get_row_setting(key)), self.table[key])
 
@@ -111,3 +124,26 @@ class PotentialTable:
         tmp_obj = json.loads(json_str)
         self.table = dict([(make_tuple(key), val) for key, val in tmp_obj.iteritems()])
         #from nose.tools import set_trace; set_trace()
+
+    def normalize(self):
+        denominator = 0
+        for key in self.table:
+            denominator += self.table[key]
+        for key in self.table:
+            self.table[key] /= denominator
+
+    def diff(self, PT):
+        compare = lambda x, y: collections.Counter(x) == collections.Counter(y)
+
+        if not compare(self.nodes, PT.nodes):
+            return True, -1
+
+        diff_value = 0
+        for key in self.table:
+            diff_value += abs(self.table[key] - PT.table[key])
+
+        if diff_value > 0:
+            return True, diff_value
+        else:
+            return False, 0
+

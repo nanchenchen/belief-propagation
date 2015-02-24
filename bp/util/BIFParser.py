@@ -15,8 +15,6 @@ __email__ = "antoine.bosselut@uw.edu"
 __status__ = "Prototype"
 
 
-f = open("hw3-dist/%s" %sys.argv[1],"r")
-BIF = f.readlines()
 
 def fixWhiteSpace(BIF_white):
     i=0
@@ -109,7 +107,9 @@ def parseBIF(BIF):
                     prob = [x.translate(None, ",;") for x in lineList]
 
                     #Store the distribution (this is a marginal distribution)
-                    theCPD[temp.getStates()] = tuple([float(h) for h in prob])
+                    states = temp.getStates()
+                    for s in range(len(states)):
+                        theCPD[tuple([states[s]])] = float(prob[s])
 
                 elif lineList[0][0] == "(":
                     #Remove all punctuation from the evidence names and the probability values
@@ -122,7 +122,6 @@ def parseBIF(BIF):
                         tmp.extend(lineList[:temp.numParents()])
                         theCPD[tuple(tmp)] = float(lineList[temp.numParents() + s])
                 i+=1
-            print theCPD
             temp.setDist(theCPD)
         else:
             i=i+1
@@ -143,13 +142,7 @@ def printNodes(nodes):
             print c.getName()
         print ""
 
-'''def printFactors(factors):
-    for a in factors:
-        print a.get'''
 
-BIF = fixWhiteSpace(BIF)
-nodes = parseBIF(BIF)
-printNodes(nodes)
 
 
 

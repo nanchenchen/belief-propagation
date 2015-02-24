@@ -1,0 +1,33 @@
+network SimpleTree {
+}
+variable A {
+  type discrete [ 2 ] { TRUE, FALSE };
+}
+variable B {
+  type discrete [ 2 ] { TRUE, FALSE };
+}
+variable C {
+  type discrete [ 2 ] { TRUE, FALSE };
+}
+variable D {
+  type discrete [ 2 ] { TRUE, FALSE };
+}
+
+probability ( A ) {
+  table 0.5, 0.5;
+}
+
+probability (B | A) {
+  (TRUE) 0.8, 0.2;
+  (FALSE) 0.2, 0.8;
+}
+
+probability (C | B) {
+  (TRUE) 0.3, 0.7;
+  (FALSE) 0.9, 0.1;
+}
+
+probability (D | B) {
+  (TRUE) 0.5, 0.5;
+  (FALSE) 0.1, 0.9;
+}
